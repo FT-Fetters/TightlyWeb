@@ -1,17 +1,19 @@
 package com.heybcat.tightlyweb.ioc.target;
 
 import java.lang.reflect.Constructor;
+import lombok.Getter;
 
 /**
  * @author Fetters
  */
+@Getter
 public class CatDefinition {
 
-    private String name;
+    private final String name;
 
-    private Class<?> clazz;
+    private final Class<?> clazz;
 
-    private Constructor<?> targetConstructor;
+    private final Constructor<?> targetConstructor;
 
     public CatDefinition(String name, Class<?> clazz, Constructor<?> targetConstructor) {
         this.name = name;

@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author Fetters
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Inject {
 
