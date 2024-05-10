@@ -5,6 +5,7 @@ import com.heybcat.tightlyweb.ioc.annotation.Inject;
 import com.heybcat.tightlyweb.ioc.proxy.CatProxyMethodInterceptor;
 import com.heybcat.tightlyweb.ioc.proxy.ProxyClassFactory;
 import com.heybcat.tightlyweb.ioc.target.CatDefinition;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -159,6 +160,16 @@ public class IocManager {
             cat = typeCatMap.get(catDefinition.getClazz());
         }
         return cat;
+    }
+
+    public List<Object> listAnnotationWith(Class<? extends Annotation> annotation){
+        List<Object> cats = new ArrayList<>();
+        for (CatDefinition catDefinition : catDefinitions) {
+            if (catDefinition.getClazz().isAnnotationPresent(annotation)) {
+                cats.add(getCat(catDefinition));
+            }
+        }
+        return cats;
     }
 
 
