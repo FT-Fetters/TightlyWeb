@@ -14,9 +14,9 @@ public class EndpointDefinition {
 
     private final Object endpointObject;
 
-    Map<String, Method> methodMap;
+    Map<String, MethodDefinition> methodMap;
 
-    public EndpointDefinition(String baseurl, Object endpointObject, Map<String, Method> methodMap) {
+    public EndpointDefinition(String baseurl, Object endpointObject, Map<String, MethodDefinition> methodMap) {
         this.baseurl = baseurl;
         this.endpointObject = endpointObject;
         this.methodMap = methodMap;

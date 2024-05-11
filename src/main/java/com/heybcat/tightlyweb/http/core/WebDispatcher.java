@@ -4,6 +4,7 @@ import com.heybcat.tightlyweb.common.util.UrlUtil;
 import com.heybcat.tightlyweb.http.annotation.WebEndpoint;
 import com.heybcat.tightlyweb.http.annotation.WebMapping;
 import com.heybcat.tightlyweb.http.entity.EndpointDefinition;
+import com.heybcat.tightlyweb.http.entity.MethodDefinition;
 import com.heybcat.tightlyweb.http.exception.WebDispatcherInitException;
 import com.heybcat.tightlyweb.ioc.IocManager;
 import java.lang.reflect.Method;
@@ -44,7 +45,7 @@ public class WebDispatcher {
                 WebMapping webMapping = webEndpoint.getClass().getAnnotation(WebMapping.class);
                 baseurl = UrlUtil.trim(webMapping.value());
             }
-            Map<String, Method> methodMap = new HashMap<>(12);
+            Map<String, MethodDefinition> methodMap = new HashMap<>(12);
             Method[] methods = webEndpoint.getClass().getMethods();
             // create endpoint definition
             EndpointDefinition endpointDefinition = new EndpointDefinition(baseurl, webEndpoint, methodMap);
@@ -53,7 +54,7 @@ public class WebDispatcher {
                 if (method.isAnnotationPresent(WebMapping.class)){
                     WebMapping webMapping = method.getAnnotation(WebMapping.class);
                     String methodUrl = UrlUtil.trim(webMapping.value());
-                    methodMap.put(methodUrl, method);
+                    methodMap.put(methodUrl, new MethodDefinition(method, List.of(webMapping.method())));
                     endpointDefinitionMap.put(baseurl + methodUrl, endpointDefinition);
 
                 }

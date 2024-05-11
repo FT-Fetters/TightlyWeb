@@ -12,6 +12,6 @@ public @interface WebMapping {
 
     String value();
 
-    HttpMethodEnum method() default HttpMethodEnum.GET;
+    HttpMethodEnum[] method() default HttpMethodEnum.GET;
 
 }
