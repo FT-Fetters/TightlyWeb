@@ -15,14 +15,14 @@ public class RouteDefinition {
 
     private URI uri;
 
-    private HttpMethodEnum method;
+    private HttpMethodEnum requestMethod;
 
     private HttpNioRequest request;
 
 
-    public RouteDefinition(URI uri, HttpMethodEnum method, HttpNioRequest request) {
+    public RouteDefinition(URI uri, HttpMethodEnum requestMethod, HttpNioRequest request) {
         this.uri = uri;
-        this.method = method;
+        this.requestMethod = requestMethod;
         this.request = request;
     }
 }
