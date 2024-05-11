@@ -1,9 +1,10 @@
 package com.heybcat.tightlyweb.ioc.proxy;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.implementation.MethodDelegation;
-import net.bytebuddy.matcher.ElementMatchers;
-import xyz.ldqc.tightcall.consumer.proxy.factory.ProxyFactory;
 import xyz.ldqc.tightcall.consumer.proxy.factory.ProxySupport;
 import xyz.ldqc.tightcall.provider.service.ByteBuddyToCglibAdapter;
 
@@ -12,19 +13,30 @@ import xyz.ldqc.tightcall.provider.service.ByteBuddyToCglibAdapter;
  */
 public class ProxyClassFactory {
 
-    private ProxyClassFactory(){
+    private ProxyClassFactory() {
         throw new UnsupportedOperationException();
     }
 
-    public static Class<?> doByteBuddyProxy(ProxySupport proxySupport){
-        return new ByteBuddy()
-            .subclass(proxySupport.getTargetClass())
-            .method(ElementMatchers.any())
-            .intercept(
-                MethodDelegation.to(new ByteBuddyToCglibAdapter(proxySupport.getInterceptor()))
-            )
+    public static Class<?> doByteBuddyProxy(ProxySupport proxySupport) {
+        ByteBuddy byteBuddy = new ByteBuddy();
+        Builder<?> builder = byteBuddy.subclass(proxySupport.getTargetClass());
+        // 复制类注解
+        for (Annotation annotation : proxySupport.getTargetClass().getAnnotations()) {
+            builder = builder.annotateType(annotation);
+        }
+        ByteBuddyToCglibAdapter adapter = new ByteBuddyToCglibAdapter(
+            proxySupport.getInterceptor());
+
+        for (Method declaredMethod : proxySupport.getTargetClass().getDeclaredMethods()) {
+            builder = builder.defineMethod(declaredMethod.getName(), declaredMethod.getReturnType(),
+                    declaredMethod.getModifiers())
+                .withParameters(declaredMethod.getParameterTypes())
+                .intercept(MethodDelegation.to(adapter))
+                .annotateMethod(declaredMethod.getAnnotations());
+        }
+        return builder
             .make()
-            .load(ProxyFactory.class.getClassLoader())
+            .load(ProxyClassFactory.class.getClassLoader())
             .getLoaded();
     }
 
