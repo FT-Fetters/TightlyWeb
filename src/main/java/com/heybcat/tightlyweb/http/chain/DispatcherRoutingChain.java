@@ -21,16 +21,16 @@ public class DispatcherRoutingChain extends AbstractTransitiveInBoundChain{
     @Override
     public void doHandler(Channel channel, Object o) {
         RouteDefinition routeDefinition = (RouteDefinition) o;
-        EndpointDefinition dispatch = webDispatcher.dispatch(routeDefinition.getUri().toString());
+        EndpointDefinition dispatch = webDispatcher.dispatch(routeDefinition.getUri().getPath());
         if (dispatch == null){
             // TODO response 404
             return;
         }
-        Method method = dispatch.getMethod(routeDefinition.getUri().toString(),
+        Method method = dispatch.getMethod(routeDefinition.getUri().getPath(),
             routeDefinition.getRequestMethod());
         if (method != null){
             WebTargetMethodDefinition webTargetMethodDefinition = new WebTargetMethodDefinition(
-                routeDefinition.getRequest(), method);
+                routeDefinition.getRequest(), method, dispatch.getEndpointObject());
             next(channel, webTargetMethodDefinition);
         }else {
             // TODO response method not support
