@@ -61,8 +61,7 @@ public class ParseRequestToMethodParameterChain extends AbstractTransitiveInBoun
 
         if (parameter.isAnnotationPresent(Body.class)) {
             try {
-                return JSON.parseObject(body, JSONObject.class)
-                    .getObject(name, parameter.getType());
+                return JSON.parseObject(body, parameter.getType());
             } catch (Exception e) {
                 return TypeUtil.parse2TargetType(body, parameter.getType());
             }
