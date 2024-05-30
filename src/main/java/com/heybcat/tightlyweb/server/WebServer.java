@@ -2,6 +2,8 @@ package com.heybcat.tightlyweb.server;
 
 import com.heybcat.tightlyweb.common.GlobalEnum;
 import com.heybcat.tightlyweb.http.HttpChainGroup;
+import com.heybcat.tightlyweb.http.core.WebDispatcher;
+import com.heybcat.tightlyweb.ioc.IocManager;
 import lombok.extern.slf4j.Slf4j;
 import xyz.ldqc.tightcall.server.HttpServerApplication;
 import xyz.ldqc.tightcall.server.exec.support.NioServerExec;
@@ -16,11 +18,16 @@ public class WebServer {
 
     private HttpServerApplication httpServerApplication;
 
-    public WebServer() {
-        this(4567);
+    private WebDispatcher webDispatcher;
+
+    private final IocManager iocManager;
+
+    public WebServer(IocManager iocManager) {
+        this(iocManager, 4567);
     }
 
-    public WebServer(int port) {
+    public WebServer(IocManager iocManager, int port) {
+        this.iocManager = iocManager;
         this.port = port;
         if (port < 0 || port > GlobalEnum.MAX_PORT) {
             throw new IllegalArgumentException("port must be between 0 and 65535");
@@ -33,7 +40,7 @@ public class WebServer {
     }
 
     private void instantiateWebDispatcher(){
-
+        this.webDispatcher = new WebDispatcher(iocManager);
     }
 
     private void bootHttpServer() {
@@ -42,7 +49,7 @@ public class WebServer {
             .executor(NioServerExec.class)
             .bind(this.port)
             .execNum(Runtime.getRuntime().availableProcessors() * 2)
-            .chain(new HttpChainGroup())
+            .chain(new HttpChainGroup(webDispatcher))
             .boot();
     }
 
