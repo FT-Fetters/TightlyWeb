@@ -40,7 +40,7 @@ public class ProxyClassFactory {
                     Annotatable<?> annotatable = defineMethod.withParameter(
                         declaredMethod.getParameterTypes()[i],
                         declaredMethod.getParameters()[i].getName(), i);
-                    annotatable.annotateParameter(declaredMethod.getParameterAnnotations()[i]);
+                    annotatable = annotatable.annotateParameter(declaredMethod.getParameterAnnotations()[i]);
                     builder = annotatable.intercept(MethodDelegation.to(adapter))
                         .annotateMethod(declaredMethod.getAnnotations());
                 }
