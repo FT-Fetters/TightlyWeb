@@ -14,9 +14,13 @@ public class WebTargetMethodDefinition {
 
     private final Method method;
 
-    public WebTargetMethodDefinition(HttpNioRequest request, Method method) {
+    private final Object endpointObject;
+
+
+    public WebTargetMethodDefinition(HttpNioRequest request, Method method, Object endpointObject) {
         this.request = request;
         this.method = method;
+        this.endpointObject = endpointObject;
     }
 
 }
