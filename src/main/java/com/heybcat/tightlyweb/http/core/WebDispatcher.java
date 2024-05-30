@@ -46,7 +46,7 @@ public class WebDispatcher {
                 baseurl = UrlUtil.trim(webMapping.value());
             }
             Map<String, MethodDefinition> methodMap = new HashMap<>(12);
-            Method[] methods = webEndpoint.getClass().getMethods();
+            Method[] methods = webEndpoint.getClass().getDeclaredMethods();
             // create endpoint definition
             EndpointDefinition endpointDefinition = new EndpointDefinition(baseurl, webEndpoint, methodMap);
             // step each method，find method with @WebMapping
