@@ -19,8 +19,8 @@ public class WebCat {
     }
 
     @WebMapping(value = "/get", method = HttpMethodEnum.GET)
-    public String get(){
-        injectTestObject.getBlackCat().eat();
-        return "get";
+    public String get(int a){
+        String eat = injectTestObject.getBlackCat().eat();
+        return "a = " + a + " eat : " + eat;
     }
 }

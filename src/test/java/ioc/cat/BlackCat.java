@@ -10,9 +10,12 @@ public class BlackCat {
         System.out.println("black cat init");
     }
 
-    public void eat()
+    public String eat()
     {
         System.out.println("black cat eat");
+        return "black cat eat";
     }
+
+
 
 }
