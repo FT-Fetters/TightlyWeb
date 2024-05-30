@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.ioc.annotation;
+package com.heybcat.tightlyweb.http.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,10 +8,8 @@ import java.lang.annotation.Target;
 /**
  * @author Fetters
  */
-@Target({ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Inject {
-
-    String value() default "";
+@Target(ElementType.PARAMETER)
+public @interface Body {
 
 }
