@@ -7,6 +7,10 @@
   <groupId>xyz.ldqc</groupId>
   <artifactId>TightlyWeb</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <modules>
+    <module>TightlyWebCore</module>
+  </modules>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
@@ -14,40 +18,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>xyz.ldqc</groupId>
-      <artifactId>tightly-call-common</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>xyz.ldqc</groupId>
-      <artifactId>tightly-call-remote-call</artifactId>
-      <version>1.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.30</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version> <!-- 确保使用适当的插件版本 -->
-        <configuration>
-          <source>11</source> <!-- Java 源代码版本 -->
-          <target>11</target> <!-- 生成的字节码版本 -->
-          <compilerArgs>
-            <arg>-parameters</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>
