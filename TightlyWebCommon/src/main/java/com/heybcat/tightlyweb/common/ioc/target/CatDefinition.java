@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.ioc.target;
+package com.heybcat.tightlyweb.common.ioc.target;
 
 import java.lang.reflect.Constructor;
 import lombok.Getter;

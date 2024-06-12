@@ -4,7 +4,7 @@ package com.heybcat.tightlyweb;
 import com.heybcat.tightlyweb.annoation.TightlyWeb;
 import com.heybcat.tightlyweb.config.ConfigFactory;
 import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
-import com.heybcat.tightlyweb.ioc.IocManager;
+import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.server.WebServer;
 
 /**

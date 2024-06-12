@@ -1,10 +1,11 @@
-package com.heybcat.tightlyweb.ioc;
+package com.heybcat.tightlyweb.common.ioc;
 
-import com.heybcat.tightlyweb.ioc.annotation.Cat;
-import com.heybcat.tightlyweb.ioc.annotation.Inject;
-import com.heybcat.tightlyweb.ioc.proxy.CatProxyMethodInterceptor;
-import com.heybcat.tightlyweb.ioc.proxy.ProxyClassFactory;
-import com.heybcat.tightlyweb.ioc.target.CatDefinition;
+import com.heybcat.tightlyweb.common.ioc.annotation.Cat;
+import com.heybcat.tightlyweb.common.ioc.annotation.Inject;
+import com.heybcat.tightlyweb.common.ioc.proxy.CatProxyMethodInterceptor;
+import com.heybcat.tightlyweb.common.ioc.proxy.ProxyClassFactory;
+import com.heybcat.tightlyweb.common.ioc.target.CatDefinition;
+import com.heybcat.tightlyweb.common.util.ReflectionUtil;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
+import net.bytebuddy.description.type.TypeDescription;
 import xyz.ldqc.tightcall.consumer.proxy.factory.ProxySupport;
 import xyz.ldqc.tightcall.util.PackageUtil;
 import xyz.ldqc.tightcall.util.StringUtil;
@@ -170,6 +172,23 @@ public class IocManager {
             }
         }
         return cats;
+    }
+
+    public void register(String name, Object cat) {
+        nameCatMap.put(name, cat);
+        if (ReflectionUtil.isCglibProxyClass(cat.getClass()) || ReflectionUtil.isByteBuddyProxyClass(cat.getClass())) {
+            if (cat.getClass().getSuperclass() != Object.class) {
+                typeCatMap.put(cat.getClass().getSuperclass(), cat);
+            }else {
+                typeCatMap.put(cat.getClass().getInterfaces()[0], cat);
+            }
+            return;
+        }
+        typeCatMap.put(cat.getClass(), cat);
+    }
+
+    public void register(Class<?> clazz, Object cat) {
+        register(clazz.getName(), cat);
     }
 
 

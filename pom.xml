@@ -10,6 +10,8 @@
   <packaging>pom</packaging>
   <modules>
     <module>TightlyWebCore</module>
+    <module>TightlyWebData</module>
+    <module>TightlyWebCommon</module>
   </modules>
 
   <properties>
@@ -17,6 +19,25 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>xyz.ldqc</groupId>
+      <artifactId>tightly-call-common</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>xyz.ldqc</groupId>
+      <artifactId>tightly-call-remote-call</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.32</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
 
 

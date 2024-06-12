@@ -6,7 +6,7 @@ import com.heybcat.tightlyweb.http.annotation.WebMapping;
 import com.heybcat.tightlyweb.http.entity.EndpointDefinition;
 import com.heybcat.tightlyweb.http.entity.MethodDefinition;
 import com.heybcat.tightlyweb.http.exception.WebDispatcherInitException;
-import com.heybcat.tightlyweb.ioc.IocManager;
+import com.heybcat.tightlyweb.common.ioc.IocManager;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;

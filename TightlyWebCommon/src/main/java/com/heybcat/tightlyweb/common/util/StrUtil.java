@@ -25,4 +25,8 @@ public class StrUtil {
         return count;
     }
 
+    public static String camelCase2Underline(String camelCase){
+        return camelCase.replaceAll("([A-Z])", "_$1").toLowerCase();
+    }
+
 }

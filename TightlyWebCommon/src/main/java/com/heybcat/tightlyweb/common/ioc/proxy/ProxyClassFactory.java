@@ -1,9 +1,8 @@
-package com.heybcat.tightlyweb.ioc.proxy;
+package com.heybcat.tightlyweb.common.ioc.proxy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.description.type.TypeDefinition;
 import net.bytebuddy.dynamic.DynamicType.Builder;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ParameterDefinition.Annotatable;
 import net.bytebuddy.dynamic.DynamicType.Builder.MethodDefinition.ParameterDefinition.Initial;

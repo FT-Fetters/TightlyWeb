@@ -1,5 +1,6 @@
-package com.heybcat.tightlyweb.ioc.annotation;
+package com.heybcat.tightlyweb.common.ioc.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -7,9 +8,9 @@ import java.lang.annotation.Target;
 /**
  * @author Fetters
  */
-@Target({java.lang.annotation.ElementType.TYPE, java.lang.annotation.ElementType.METHOD})
+@Target({ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Cat {
+public @interface Inject {
 
     String value() default "";
 

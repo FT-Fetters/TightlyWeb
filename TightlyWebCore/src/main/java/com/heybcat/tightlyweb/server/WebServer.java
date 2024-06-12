@@ -3,7 +3,7 @@ package com.heybcat.tightlyweb.server;
 import com.heybcat.tightlyweb.common.GlobalEnum;
 import com.heybcat.tightlyweb.http.HttpChainGroup;
 import com.heybcat.tightlyweb.http.core.WebDispatcher;
-import com.heybcat.tightlyweb.ioc.IocManager;
+import com.heybcat.tightlyweb.common.ioc.IocManager;
 import lombok.extern.slf4j.Slf4j;
 import xyz.ldqc.tightcall.server.HttpServerApplication;
 import xyz.ldqc.tightcall.server.exec.support.NioServerExec;

@@ -1,10 +1,12 @@
 package com.heybcat.tightlyweb.common.resource;
 
 import java.io.InputStream;
+import lombok.Getter;
 
 /**
  * @author Fetters
  */
+@Getter
 public class Resource {
 
     private final String uri;
@@ -16,11 +18,4 @@ public class Resource {
         this.inputStream = inputStream;
     }
 
-    public String getUri() {
-        return uri;
-    }
-
-    public InputStream getInputStream() {
-        return inputStream;
-    }
 }

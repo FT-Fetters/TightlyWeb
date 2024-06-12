@@ -3,8 +3,8 @@ package ioc.cat;
 import com.heybcat.tightlyweb.http.annotation.Body;
 import com.heybcat.tightlyweb.http.annotation.WebEndpoint;
 import com.heybcat.tightlyweb.http.annotation.WebMapping;
-import com.heybcat.tightlyweb.ioc.annotation.Cat;
-import com.heybcat.tightlyweb.ioc.annotation.Inject;
+import com.heybcat.tightlyweb.common.ioc.annotation.Cat;
+import com.heybcat.tightlyweb.common.ioc.annotation.Inject;
 import entity.PostTestEntity;
 import xyz.ldqc.tightcall.protocol.http.HttpMethodEnum;
 

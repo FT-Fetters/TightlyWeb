@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.ioc.proxy;
+package com.heybcat.tightlyweb.common.ioc.proxy;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Callable;
@@ -16,7 +16,6 @@ public class CatProxyMethodInterceptor implements ProxyMethodInterceptor {
         // TODO finish intercept
         return callable.call();
     }
-
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy)
         throws Throwable {
