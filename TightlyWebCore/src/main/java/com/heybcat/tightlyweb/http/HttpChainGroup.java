@@ -23,7 +23,7 @@ public class HttpChainGroup extends DefaultChannelChainGroup {
     private void loadChain(){
         this.addLast(new FilterHttpRequestChain())
             .addLast(new EncapsulateRoutingChain())
-            .addLast(new DispatcherRoutingChain(webDispatcher))
+            .addLast(new DispatcherRoutingChain(webDispatcher, this))
             .addLast(new ParseRequestToMethodParameterChain())
             .addLast(new InvokeTargetChain());
     }
