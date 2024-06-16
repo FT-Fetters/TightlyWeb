@@ -35,13 +35,19 @@ public class IocManager {
 
     private List<CatDefinition> catDefinitions;
 
+    private final Class<?> bootClass;
+
     public IocManager(final String basePackage) {
-        this.basePackage = basePackage;
-        nameCatMap = new ConcurrentHashMap<>();
-        typeCatMap = new ConcurrentHashMap<>();
-        create();
+        this(basePackage, IocManager.class);
     }
 
+    public IocManager(final String basePackage, Class<?> bootClass){
+        this.basePackage = basePackage;
+        this.nameCatMap = new ConcurrentHashMap<>();
+        this.typeCatMap = new ConcurrentHashMap<>();
+        this.bootClass = bootClass;
+        create();
+    }
     private void create() {
         scanCatDefinition();
         getCat();
@@ -49,8 +55,7 @@ public class IocManager {
 
     private void scanCatDefinition() {
         // scan target package all class
-        List<Class<?>> packageClasses = PackageUtil.getPackageClasses(basePackage,
-            IocManager.class);
+        List<Class<?>> packageClasses = PackageUtil.getPackageClasses(basePackage, bootClass);
         catDefinitions = new ArrayList<>();
         for (Class<?> clazz : packageClasses) {
             // find all annotation with cat and save as catDefinition
