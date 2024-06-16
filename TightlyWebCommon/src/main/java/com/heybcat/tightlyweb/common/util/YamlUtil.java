@@ -75,7 +75,7 @@ public class YamlUtil {
             // if property stack is not empty, combine all nodes
             StringBuilder sb = new StringBuilder();
             for (String s : propertyStack) {
-                sb.append(s).append(".");
+                sb.insert(0, ".").insert(0, s);
             }
             configMap.put(sb + key, value);
         } else {
@@ -118,7 +118,7 @@ public class YamlUtil {
             propertyStack.push(line.trim().replace(":", ""));
         } else if (level == propertyStack.size()) {
             // if level is equal to stack size, it is a new child
-            propertyStack.push(line.trim());
+            propertyStack.push(line.trim().replaceAll(":$", ""));
         } else if (level < propertyStack.size()) {
             // if level is less than stack size, it is a child of parent
             // pop stack until level is equal to stack size
