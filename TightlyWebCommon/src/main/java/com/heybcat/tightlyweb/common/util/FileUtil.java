@@ -5,10 +5,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 /**
  * @author Fetters
@@ -88,6 +94,60 @@ public class FileUtil {
 
             fw.write(content);
         }
+    }
+
+    public static List<File> listAllFilesInDir(String dirPath) {
+        return listAllFilesInDir(new File(dirPath));
+    }
+
+    private static List<File> listAllFilesInDir(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files == null) {
+                return Collections.emptyList();
+            }
+            List<File> r = new ArrayList<>();
+            for (File f : files) {
+                r.addAll(listAllFilesInDir(f));
+            }
+            return r;
+        } else {
+            return Collections.singletonList(file);
+        }
+    }
+
+    public static List<String> listResourceFiles(Class<?> bootClass, String path) {
+        URL url = bootClass.getClassLoader().getResource(path);
+        if (url == null) {
+            return Collections.emptyList();
+        }
+
+        if (url.getProtocol().equals("file")) {
+            // 处理文件系统中的资源
+            try {
+                return Files.walk(Paths.get(url.toURI()))
+                    .filter(Files::isRegularFile)
+                    .map(p -> p.toFile().getAbsolutePath().substring(p.toFile().getAbsolutePath().indexOf(path)))
+                    .collect(Collectors.toList());
+            } catch (IOException | URISyntaxException e) {
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
+        } else if (url.getProtocol().equals("jar")) {
+            // 处理JAR文件中的资源
+            String jarPath = url.getPath().substring(5, url.getPath().indexOf("!"));
+            try (java.util.jar.JarFile jar = new java.util.jar.JarFile(jarPath)) {
+                return jar.stream()
+                    .filter(e -> e.getName().startsWith(path) && !e.isDirectory())
+                    .map(ZipEntry::getName)
+                    .collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
+        }
+
+        return Collections.emptyList();
     }
 
 

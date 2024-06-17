@@ -23,6 +23,9 @@ public class DefaultResourceLoader implements ResourceLoader {
 
     @Override
     public Resource load(String path) {
+        if (path.startsWith("/")){
+            path = path.substring(1);
+        }
         InputStream resourceStream = this.classLoader.getResourceAsStream(path);
         if (resourceStream == null) {
             throw new ConfigLoaderException(StrUtil.format("No such path - {0}", path));

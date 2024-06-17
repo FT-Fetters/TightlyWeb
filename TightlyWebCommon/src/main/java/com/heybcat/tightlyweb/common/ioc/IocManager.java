@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.description.type.TypeDescription;
 import xyz.ldqc.tightcall.consumer.proxy.factory.ProxySupport;
 import xyz.ldqc.tightcall.util.PackageUtil;
 import xyz.ldqc.tightcall.util.StringUtil;
@@ -194,6 +193,10 @@ public class IocManager {
 
     public void register(Class<?> clazz, Object cat) {
         register(clazz.getName(), cat);
+    }
+
+    public Class<?> getBootClass() {
+        return bootClass;
     }
 
 
