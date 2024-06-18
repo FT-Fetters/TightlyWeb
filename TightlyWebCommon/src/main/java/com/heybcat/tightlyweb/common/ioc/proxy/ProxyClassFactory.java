@@ -2,6 +2,7 @@ package com.heybcat.tightlyweb.common.ioc.proxy;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Objects;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType.Builder;
@@ -33,9 +34,11 @@ public class ProxyClassFactory {
             proxySupport.getInterceptor());
 
         for (Method declaredMethod : proxySupport.getTargetClass().getDeclaredMethods()) {
+            if (!Modifier.isPublic(declaredMethod.getModifiers())) {
+                continue;
+            }
             Initial<?> defineMethod = builder.defineMethod(declaredMethod.getName(),
-                declaredMethod.getReturnType(),
-                declaredMethod.getModifiers());
+                declaredMethod.getReturnType());
 
             if (declaredMethod.getParameterTypes().length > 0) {
                 Annotatable<?> annotatable = null;
