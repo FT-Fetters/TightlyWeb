@@ -1,10 +1,13 @@
-package com.heybcat.tightlyweb.http;
+package com.heybcat.tightlyweb.http.chain.group;
 
+import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.http.chain.DispatcherRoutingChain;
 import com.heybcat.tightlyweb.http.chain.EncapsulateRoutingChain;
+import com.heybcat.tightlyweb.http.chain.ExceptionCatchChain;
 import com.heybcat.tightlyweb.http.chain.FilterHttpRequestChain;
 import com.heybcat.tightlyweb.http.chain.InvokeTargetChain;
 import com.heybcat.tightlyweb.http.chain.ParseRequestToMethodParameterChain;
+import com.heybcat.tightlyweb.http.chain.RedirectChain;
 import com.heybcat.tightlyweb.http.core.WebDispatcher;
 import xyz.ldqc.tightcall.chain.support.DefaultChannelChainGroup;
 
@@ -15,13 +18,18 @@ public class HttpChainGroup extends DefaultChannelChainGroup {
 
     private final WebDispatcher webDispatcher;
 
-    public HttpChainGroup(WebDispatcher webDispatcher) {
+    private final TightlyWebConfigEntity config;
+
+    public HttpChainGroup(WebDispatcher webDispatcher, TightlyWebConfigEntity config) {
         this.webDispatcher = webDispatcher;
+        this.config = config;
         loadChain();
     }
 
     private void loadChain(){
-        this.addLast(new FilterHttpRequestChain())
+        this.addLast(new ExceptionCatchChain(this))
+            .addLast(new FilterHttpRequestChain())
+            .addLast(new RedirectChain(config.getRedirect()))
             .addLast(new EncapsulateRoutingChain())
             .addLast(new DispatcherRoutingChain(webDispatcher, this))
             .addLast(new ParseRequestToMethodParameterChain())
