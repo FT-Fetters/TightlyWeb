@@ -10,6 +10,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -173,6 +174,23 @@ public class IocManager {
         for (CatDefinition catDefinition : catDefinitions) {
             if (catDefinition.getClazz().isAnnotationPresent(annotation)) {
                 cats.add(getCat(catDefinition));
+            }
+        }
+        return cats;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> listInterfaceWith(Class<T> clazz){
+        if (!clazz.isInterface()){
+            return Collections.emptyList();
+        }
+        List<T> cats = new ArrayList<>();
+        for (CatDefinition catDefinition : catDefinitions) {
+            Class<?>[] interfaces = catDefinition.getClazz().getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                if (interfaceClass.equals(clazz)) {
+                    cats.add((T) getCat(catDefinition));
+                }
             }
         }
         return cats;

@@ -1,5 +1,6 @@
 package com.heybcat.tightlyweb.http.chain.group;
 
+import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.http.chain.DispatcherRoutingChain;
 import com.heybcat.tightlyweb.http.chain.EncapsulateRoutingChain;
@@ -8,6 +9,7 @@ import com.heybcat.tightlyweb.http.chain.FilterHttpRequestChain;
 import com.heybcat.tightlyweb.http.chain.InvokeTargetChain;
 import com.heybcat.tightlyweb.http.chain.ParseRequestToMethodParameterChain;
 import com.heybcat.tightlyweb.http.chain.RedirectChain;
+import com.heybcat.tightlyweb.http.chain.RequestFilterChain;
 import com.heybcat.tightlyweb.http.core.WebDispatcher;
 import xyz.ldqc.tightcall.chain.support.DefaultChannelChainGroup;
 
@@ -20,9 +22,12 @@ public class HttpChainGroup extends DefaultChannelChainGroup {
 
     private final TightlyWebConfigEntity config;
 
-    public HttpChainGroup(WebDispatcher webDispatcher, TightlyWebConfigEntity config) {
+    private final IocManager iocManager;
+
+    public HttpChainGroup(WebDispatcher webDispatcher, TightlyWebConfigEntity config, IocManager iocManager) {
         this.webDispatcher = webDispatcher;
         this.config = config;
+        this.iocManager = iocManager;
         loadChain();
     }
 
@@ -33,6 +38,7 @@ public class HttpChainGroup extends DefaultChannelChainGroup {
             .addLast(new EncapsulateRoutingChain())
             .addLast(new DispatcherRoutingChain(webDispatcher, this))
             .addLast(new ParseRequestToMethodParameterChain())
+            .addLast(new RequestFilterChain(iocManager, this))
             .addLast(new InvokeTargetChain());
     }
 
