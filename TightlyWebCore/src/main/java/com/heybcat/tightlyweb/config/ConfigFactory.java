@@ -8,6 +8,7 @@ import com.heybcat.tightlyweb.common.util.YamlUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,8 @@ public class ConfigFactory {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigFactory.class);
 
+    private static Map<String, String> cacheConfigMap;
+
     private ConfigFactory() {
         throw new IllegalStateException("Illegal operation");
     }
@@ -29,6 +32,7 @@ public class ConfigFactory {
         DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
         Resource resource = resourceLoader.load(config);
         Map<String, String> configMap = YamlUtil.loadConfigMap(resource);
+        cacheConfigMap = configMap;
 
         Field[] declaredFields = configClass.getDeclaredFields();
         T configEntity;
@@ -103,6 +107,10 @@ public class ConfigFactory {
         if (fieldType.equals(Character.class)) {
             setterMethod.invoke(target, value.charAt(0));
         }
+    }
+
+    public static Map<String, String> getCacheConfigMap () {
+        return cacheConfigMap != null ? cacheConfigMap : new HashMap<>(0);
     }
 
 

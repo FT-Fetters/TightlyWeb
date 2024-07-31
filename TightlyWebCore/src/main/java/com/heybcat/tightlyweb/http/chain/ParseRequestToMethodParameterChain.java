@@ -1,7 +1,6 @@
 package com.heybcat.tightlyweb.http.chain;
 
 import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import com.heybcat.tightlyweb.common.util.TypeUtil;
 import com.heybcat.tightlyweb.http.annotation.Body;
 import com.heybcat.tightlyweb.http.entity.WebContext;

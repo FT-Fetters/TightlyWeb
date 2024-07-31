@@ -2,6 +2,7 @@ package com.heybcat.tightlyweb.common.ioc;
 
 import com.heybcat.tightlyweb.common.ioc.annotation.Cat;
 import com.heybcat.tightlyweb.common.ioc.annotation.Inject;
+import com.heybcat.tightlyweb.common.ioc.invocation.BeforeInvocation;
 import com.heybcat.tightlyweb.common.ioc.proxy.CatProxyMethodInterceptor;
 import com.heybcat.tightlyweb.common.ioc.proxy.ProxyClassFactory;
 import com.heybcat.tightlyweb.common.ioc.target.CatDefinition;
@@ -10,6 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,12 +43,22 @@ public class IocManager {
     }
 
     public IocManager(final String basePackage, Class<?> bootClass){
+        this(basePackage, bootClass, null);
+    }
+
+    public IocManager(final String basePackage, Class<?> bootClass, BeforeInvocation beforeInvocation){
         this.basePackage = basePackage;
         this.nameCatMap = new ConcurrentHashMap<>();
         this.typeCatMap = new ConcurrentHashMap<>();
         this.bootClass = bootClass;
+        if (beforeInvocation != null){
+            beforeInvocation.invoke(this);
+        }
         create();
     }
+
+
+
     private void create() {
         scanCatDefinition();
         getCat();
@@ -85,6 +97,9 @@ public class IocManager {
             }
         }
         // if not find target, use no arg constructor
+        if (noArgConstructor == null){
+            log.warn("cat {} can not find target constructor, may not use @Inject?", clazz.getName());
+        }
         return noArgConstructor;
     }
 
@@ -108,6 +123,9 @@ public class IocManager {
         if (cat != null) {
             return cat;
         }
+        if (!ReflectionUtil.hasAnnotation(catDefinition.getClazz(), Cat.class)) {
+            return null;
+        }
         return newCatInstance(catDefinition);
     }
 
@@ -118,7 +136,12 @@ public class IocManager {
         proxySupport.setInterceptor(new CatProxyMethodInterceptor());
         Class<?> proxyClass = ProxyClassFactory.doByteBuddyProxy(proxySupport);
         // get target constructor parameters
-        Class<?>[] parameterTypes = catDefinition.getTargetConstructor().getParameterTypes();
+        Constructor<?> targetConstructor = catDefinition.getTargetConstructor();
+        if (targetConstructor == null) {
+            log.error("cat {} can not find target constructor, may not use @Inject?", catDefinition.getClazz().getName());
+            return null;
+        }
+        Class<?>[] parameterTypes = targetConstructor.getParameterTypes();
         if (parameterTypes.length == 0) {
             // parameter length is 0 means no arg constructor or inject constructor is no arg constructor
             try {
@@ -173,6 +196,23 @@ public class IocManager {
         for (CatDefinition catDefinition : catDefinitions) {
             if (catDefinition.getClazz().isAnnotationPresent(annotation)) {
                 cats.add(getCat(catDefinition));
+            }
+        }
+        return cats;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> listInterfaceWith(Class<T> clazz){
+        if (!clazz.isInterface()){
+            return Collections.emptyList();
+        }
+        List<T> cats = new ArrayList<>();
+        for (CatDefinition catDefinition : catDefinitions) {
+            Class<?>[] interfaces = catDefinition.getClazz().getInterfaces();
+            for (Class<?> interfaceClass : interfaces) {
+                if (interfaceClass.equals(clazz)) {
+                    cats.add((T) getCat(catDefinition));
+                }
             }
         }
         return cats;

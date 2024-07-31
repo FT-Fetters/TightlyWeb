@@ -3,3 +3,9 @@ server:
   resource:
     enable: true
     path: /web
+  web:
+    redirect: /web/->/web/index.html
+  db:
+    name: testDB
+    basePackage:
+    log: true

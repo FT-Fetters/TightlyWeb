@@ -1,6 +1,6 @@
 package ioc.cat;
 
-import com.heybcat.tightlyweb.ioc.annotation.Cat;
+import com.heybcat.tightlyweb.common.ioc.annotation.Cat;
 
 @Cat
 public class BlackCat {

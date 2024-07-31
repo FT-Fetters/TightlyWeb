@@ -63,4 +63,16 @@ public class Response {
             .build();
     }
 
+    public static HttpNioResponse unauthorized(String content){
+        Map<String, String> body = new HashMap<>(1);
+        body.put("msg", content);
+        return HttpNioResponse.builder()
+            .code(HttpCodeEnum.UNAUTHORIZED.getCode())
+            .version(HttpVersionEnum.HTTP_1_1)
+            .contentType(ContentTypeEnum.APPLICATION_JSON)
+            .msg(HttpCodeEnum.UNAUTHORIZED.getMsg())
+            .body(JSON.toJSONBytes(body))
+            .build();
+    }
+
 }

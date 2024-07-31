@@ -24,7 +24,7 @@ public class EndpointDefinition {
     }
 
     public Method getMethod(String url, HttpMethodEnum method) {
-        MethodDefinition methodDefinition = methodMap.get(url.replace(baseurl, ""));
+        MethodDefinition methodDefinition = methodMap.get(url.replaceFirst(baseurl, ""));
         if (methodDefinition.getSupportMethod().contains(method)) {
             return methodDefinition.getMethod();
         }else {

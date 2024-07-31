@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>xyz.ldqc</groupId>
+  <groupId>com.heybcat</groupId>
   <artifactId>TightlyWeb</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -36,6 +36,12 @@
       <artifactId>lombok</artifactId>
       <version>1.18.32</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.11.0-M2</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 

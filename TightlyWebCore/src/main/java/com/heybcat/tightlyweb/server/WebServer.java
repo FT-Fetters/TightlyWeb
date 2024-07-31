@@ -54,7 +54,7 @@ public class WebServer {
             .executor(NioServerExec.class)
             .bind(this.port)
             .execNum(Runtime.getRuntime().availableProcessors() * 2)
-            .chain(new HttpChainGroup(webDispatcher))
+            .chain(new HttpChainGroup(webDispatcher, config, iocManager))
             .boot();
     }
 

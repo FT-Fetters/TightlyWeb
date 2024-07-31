@@ -125,7 +125,7 @@ public class YamlUtil {
             while (propertyStack.size() > level) {
                 propertyStack.pop();
             }
-            propertyStack.push(line.trim());
+            propertyStack.push(line.trim().replaceAll(":$", ""));
         } else {
             // bad format
             log.error("yaml config load error, line: {}", line);
