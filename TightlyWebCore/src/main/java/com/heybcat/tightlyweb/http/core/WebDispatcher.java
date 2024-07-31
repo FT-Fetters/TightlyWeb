@@ -103,7 +103,7 @@ public class WebDispatcher {
 
         for (String filePath : fileList) {
             Map<String, MethodDefinition> map = new HashMap<>(1);
-            String relatePath = filePath.replace(resourcePath, "").replace("\\", "/");
+            String relatePath = filePath.replaceFirst(resourcePath, "").replace("\\", "/");
             map.put(relatePath, methodDefinition);
             endpointDefinitionMap.put("/" + filePath.replace("\\", "/"),
                 new EndpointDefinition("/" + resourcePath, resourceDispatchHandler, map));

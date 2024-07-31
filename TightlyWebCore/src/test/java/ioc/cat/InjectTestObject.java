@@ -1,7 +1,7 @@
 package ioc.cat;
 
-import com.heybcat.tightlyweb.ioc.annotation.Cat;
-import com.heybcat.tightlyweb.ioc.annotation.Inject;
+import com.heybcat.tightlyweb.common.ioc.annotation.Cat;
+import com.heybcat.tightlyweb.common.ioc.annotation.Inject;
 
 @Cat
 public class InjectTestObject {

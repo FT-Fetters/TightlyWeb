@@ -29,7 +29,7 @@ public class RequestFilterChain extends AbstractTransitiveInBoundChain {
 
     @Override
     public void doHandler(Channel channel, Object o) {
-        if (WebContext.class.isAssignableFrom(o.getClass())) {
+        if ( !REQUEST_FILTERS.isEmpty() && WebContext.class.isAssignableFrom(o.getClass())) {
             WebContext webContext = (WebContext) o;
             FilterContext.CONTEXT_THREAD_LOCAL.set(0);
             REQUEST_FILTERS.get(0).doFilter(webContext, FilterContext.INSTANCE);

@@ -31,4 +31,10 @@ public class WebCat {
     public String post(@Body PostTestEntity entity){
         return "post body: " + entity.getA();
     }
+
+
+    @WebMapping("/ban/path")
+    public String testBan(){
+        return "not ban";
+    }
 }

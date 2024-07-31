@@ -2,10 +2,14 @@ package com.heybcat.tightlyweb;
 
 
 import com.heybcat.tightlyweb.annoation.TightlyWeb;
+import com.heybcat.tightlyweb.common.cache.TightlyCache;
 import com.heybcat.tightlyweb.config.ConfigFactory;
+import com.heybcat.tightlyweb.config.ConfigManager;
 import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.server.WebServer;
+import com.heybcat.tightlyweb.sql.support.LiteMapping;
+import xyz.ldqc.tightcall.util.StringUtil;
 
 /**
  * @author Fetters
@@ -17,6 +21,7 @@ public class TightlyWebApplication {
     private IocManager iocManager;
 
     private TightlyWebConfigEntity configEntity;
+
 
     private WebServer webServer;
 
@@ -42,11 +47,40 @@ public class TightlyWebApplication {
     private void loadIoc() {
         TightlyWeb tightlyWeb = bootClass.getAnnotation(TightlyWeb.class);
         String basePackage = tightlyWeb.basePackage();
-        this.iocManager = new IocManager(basePackage);
+        this.iocManager = new IocManager(basePackage, bootClass, ioc -> {
+            registerSomething(ioc);
+            loadLiteMapping(ioc);
+            loadCacheModule(ioc);
+            loadConfigManager(ioc);
+        });
+    }
+
+    private void registerSomething(IocManager iocManager) {
+        iocManager.register(bootClass, bootClass);
+        iocManager.register(TightlyWebConfigEntity.class, configEntity);
+    }
+
+    private void loadLiteMapping(IocManager iocManager) {
+        LiteMapping liteMapping;
+        String db = configEntity.getDbName();
+        String mapperPath = configEntity.getDbBasePackage();
+        if (StringUtil.isBlank(db)){
+            return;
+        }
+        liteMapping = LiteMapping.getMapping(db, mapperPath, configEntity.getDbLog(), iocManager);
+        iocManager.register(LiteMapping.class, liteMapping);
+    }
+
+    private void loadCacheModule(IocManager iocManager) {
+        iocManager.register(TightlyCache.class, TightlyCache.newCache());
+    }
+
+    private void loadConfigManager(IocManager iocManager){
+        iocManager.register(ConfigManager.class, new ConfigManager(ConfigFactory.getCacheConfigMap()));
     }
 
     private void loadWebServer() {
-        webServer = new WebServer(iocManager, configEntity.getPort());
+        webServer = new WebServer(iocManager, configEntity);
         webServer.run();
     }
 

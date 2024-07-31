@@ -1,5 +1,7 @@
 package com.heybcat.tightlyweb.common.util;
 
+import xyz.ldqc.tightcall.util.StringUtil;
+
 /**
  * @author Fetters
  */
@@ -10,6 +12,9 @@ public class TypeUtil {
     }
 
     public static Object parse2TargetType(String value, Class<?> targetType){
+        if (StringUtil.isBlank(value)){
+            return null;
+        }
         if (targetType.isPrimitive()){
             return TypeUtil.parse2TargetType(value, TypeUtil.getWrapperType(targetType));
         }
