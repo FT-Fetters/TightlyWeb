@@ -131,7 +131,7 @@ public class DefaultSqlExpressionParser {
             resultTargetExpression = resultTargetExpression.replace(resultTargetExpression.substring(startIndex, endIndex + 1),
                 parseObject2Target(o));
         }
-        return resultTargetExpression.trim();
+        return afterHandle(resultTargetExpression);
     }
 
     private static String parseObject2Target(Object o) {
@@ -165,6 +165,13 @@ public class DefaultSqlExpressionParser {
             return sb.toString();
         }
         return "";
+    }
+
+    private static String afterHandle(String resultTargetExpression){
+        resultTargetExpression = resultTargetExpression.trim();
+        resultTargetExpression = resultTargetExpression.replace("%'", "'%");
+        resultTargetExpression = resultTargetExpression.replace("'%", "%'");
+        return resultTargetExpression;
     }
 
 }
