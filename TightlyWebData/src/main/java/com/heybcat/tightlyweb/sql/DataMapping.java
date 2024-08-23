@@ -15,4 +15,8 @@ public interface DataMapping {
     <T> Page<T> selectPage(int size, int current, MapperMethodRef<T> ref);
 
     PageInfo getPageInfo();
+
+    boolean delete(Object obj);
+
+    boolean deleteById(Class<?> clazz, Object id);
 }

@@ -121,6 +121,9 @@ public class LiteMapping implements DataMapping {
 
             if (dbLog) {
                 log.info("execute sql: {}", sql);
+                if (parameterCount > 0) {
+                    log.info("execute params: {}", Arrays.toString(params));
+                }
             }
             if (isQuery) {
                 // if is query operation, read result set and write to target class object list
@@ -276,6 +279,46 @@ public class LiteMapping implements DataMapping {
     @Override
     public PageInfo getPageInfo() {
         return pageInfoThreadLocal.get();
+    }
+
+    @Override
+    public boolean delete(Object obj) {
+        Field[] declaredFields = obj.getClass().getDeclaredFields();
+        String id = null;
+        Object idValue = null;
+        for (Field declaredField : declaredFields) {
+            if (!declaredField.isAnnotationPresent(TableId.class)) {
+                continue;
+            }
+            id = declaredField.getName();
+            idValue = ReflectionUtil.getFieldValue(obj, id);
+        }
+        Table table = obj.getClass().getAnnotation(Table.class);
+        return doDelete(idValue, id, table);
+    }
+
+    @Override
+    public boolean deleteById(Class<?> clazz, Object id) {
+        Field[] declaredFields = clazz.getDeclaredFields();
+        String idField = null;
+        for (Field declaredField : declaredFields) {
+            if (!declaredField.isAnnotationPresent(TableId.class)) {
+                continue;
+            }
+            idField = declaredField.getName();
+        }
+        Table table = clazz.getAnnotation(Table.class);
+        return doDelete(id, idField, table);
+    }
+
+    private boolean doDelete(Object idValue, String idField, Table table) {
+        if (StringUtil.isBlank(idField) || table == null || idValue == null) {
+            return false;
+        }
+        String tableName = table.name();
+        String sqlBuilder = "DELETE FROM " + tableName
+            + " WHERE " + StrUtil.camelCase2Underline(idField) + " = ?";
+        return !execute(Integer.class, sqlBuilder, false, idValue).isEmpty();
     }
 
     private String concatenateInsert(Map<String, String> fieldMap, String tableName) {

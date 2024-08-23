@@ -29,7 +29,8 @@ public class DefaultSqlExpressionParser {
     private static String expressionAvailable(String expression, Map<String, Object> args) {
         String[] split = expression.split("->");
         if (split.length != 2) {
-            throw new BadExpressionException("parse exception fail, cause bad wrong format");
+            throw new BadExpressionException("parse exception '"+ expression +"' fail, cause bad wrong format, "
+                + "may miss '->'");
         }
 
         String condition = split[0].trim();
