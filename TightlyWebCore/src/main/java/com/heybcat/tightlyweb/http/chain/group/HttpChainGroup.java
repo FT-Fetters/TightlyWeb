@@ -2,6 +2,7 @@ package com.heybcat.tightlyweb.http.chain.group;
 
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
+import com.heybcat.tightlyweb.http.chain.CrossOriginChain;
 import com.heybcat.tightlyweb.http.chain.DispatcherRoutingChain;
 import com.heybcat.tightlyweb.http.chain.EncapsulateRoutingChain;
 import com.heybcat.tightlyweb.http.chain.ExceptionCatchChain;
@@ -39,7 +40,8 @@ public class HttpChainGroup extends DefaultChannelChainGroup {
             .addLast(new DispatcherRoutingChain(webDispatcher, this))
             .addLast(new ParseRequestToMethodParameterChain())
             .addLast(new RequestFilterChain(iocManager, this))
-            .addLast(new InvokeTargetChain());
+            .addLast(new InvokeTargetChain())
+            .addLast(new CrossOriginChain(config));
     }
 
 }

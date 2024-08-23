@@ -30,4 +30,10 @@ public class TightlyWebConfigEntity {
     @ConfigValue(key = "server.db.log")
     private Boolean dbLog;
 
+    @ConfigValue(key = "server.crossOrigin.enable")
+    private Boolean crossOriginEnable;
+
+    @ConfigValue(key = "server.crossOrigin.allowOrigin")
+    private String crossOriginAllowOrigin;
+
 }

@@ -7,8 +7,11 @@ import com.heybcat.tightlyweb.config.ConfigFactory;
 import com.heybcat.tightlyweb.config.ConfigManager;
 import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
+import com.heybcat.tightlyweb.http.annotation.CrossOrigin;
 import com.heybcat.tightlyweb.server.WebServer;
 import com.heybcat.tightlyweb.sql.support.LiteMapping;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import xyz.ldqc.tightcall.util.StringUtil;
 
 /**
@@ -42,6 +45,12 @@ public class TightlyWebApplication {
 
     private void loadConfig() {
         this.configEntity = ConfigFactory.build("application.yml", TightlyWebConfigEntity.class);
+        // cross origin config
+        CrossOrigin crossOrigin = bootClass.getAnnotation(CrossOrigin.class);
+        if (crossOrigin != null && this.configEntity != null){
+            this.configEntity.setCrossOriginEnable(true);
+            this.configEntity.setCrossOriginAllowOrigin(String.join(",", crossOrigin.allowOrigin()));
+        }
     }
 
     private void loadIoc() {
