@@ -232,6 +232,9 @@ public class IocManager {
     }
 
     public void register(Class<?> clazz, Object cat) {
+        if (clazz.isAssignableFrom(cat.getClass())) {
+            typeCatMap.put(clazz, cat);
+        }
         register(clazz.getName(), cat);
     }
 

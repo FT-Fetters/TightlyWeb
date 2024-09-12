@@ -9,9 +9,10 @@ import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.http.annotation.CrossOrigin;
 import com.heybcat.tightlyweb.server.WebServer;
-import com.heybcat.tightlyweb.sql.support.LiteMapping;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import com.heybcat.tightlyweb.sql.DataMapping;
+import com.heybcat.tightlyweb.sql.support.DataDriver;
+import com.heybcat.tightlyweb.sql.support.MappingFactory;
+import lombok.Getter;
 import xyz.ldqc.tightcall.util.StringUtil;
 
 /**
@@ -21,6 +22,7 @@ public class TightlyWebApplication {
 
     private final Class<?> bootClass;
 
+    @Getter
     private IocManager iocManager;
 
     private TightlyWebConfigEntity configEntity;
@@ -58,7 +60,7 @@ public class TightlyWebApplication {
         String basePackage = tightlyWeb.basePackage();
         this.iocManager = new IocManager(basePackage, bootClass, ioc -> {
             registerSomething(ioc);
-            loadLiteMapping(ioc);
+            loadDataMapping(ioc);
             loadCacheModule(ioc);
             loadConfigManager(ioc);
         });
@@ -69,15 +71,18 @@ public class TightlyWebApplication {
         iocManager.register(TightlyWebConfigEntity.class, configEntity);
     }
 
-    private void loadLiteMapping(IocManager iocManager) {
-        LiteMapping liteMapping;
-        String db = configEntity.getDbName();
+    private void loadDataMapping(IocManager iocManager) {
+        DataMapping dataMapping;
+        String target = configEntity.getDbTarget();
         String mapperPath = configEntity.getDbBasePackage();
-        if (StringUtil.isBlank(db)){
+        String user = configEntity.getDbUser();
+        String password = configEntity.getDbPassword();
+        String type = configEntity.getDbType();
+        if (StringUtil.isBlank(target)){
             return;
         }
-        liteMapping = LiteMapping.getMapping(db, mapperPath, configEntity.getDbLog(), iocManager);
-        iocManager.register(LiteMapping.class, liteMapping);
+        dataMapping = MappingFactory.getMapping(DataDriver.getDriver(type), target, user, password, mapperPath, configEntity.getDbLog(), iocManager);
+        iocManager.register(DataMapping.class, dataMapping);
     }
 
     private void loadCacheModule(IocManager iocManager) {
@@ -92,5 +97,4 @@ public class TightlyWebApplication {
         webServer = new WebServer(iocManager, configEntity);
         webServer.run();
     }
-
 }

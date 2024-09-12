@@ -21,14 +21,23 @@ public class TightlyWebConfigEntity {
     @ConfigValue(key = "server.web.redirect")
     private String redirect;
 
-    @ConfigValue(key = "server.db.name")
-    private String dbName;
+    @ConfigValue(key = "server.db.target")
+    private String dbTarget;
 
     @ConfigValue(key = "server.db.basePackage")
     private String dbBasePackage;
 
+    @ConfigValue(key = "server.db.type")
+    private String dbType;
+
     @ConfigValue(key = "server.db.log")
     private Boolean dbLog;
+
+    @ConfigValue(key = "server.db.user")
+    private String dbUser;
+
+    @ConfigValue(key = "server.db.password")
+    private String dbPassword;
 
     @ConfigValue(key = "server.crossOrigin.enable")
     private Boolean crossOriginEnable;

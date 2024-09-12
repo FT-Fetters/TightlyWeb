@@ -1,10 +1,10 @@
 package com.heybcat.tightlyweb.sql.support.proxy;
 
+import com.heybcat.tightlyweb.sql.DataMapping;
 import com.heybcat.tightlyweb.sql.annotation.Insert;
 import com.heybcat.tightlyweb.sql.annotation.Select;
 import com.heybcat.tightlyweb.sql.entity.PageInfo;
 import com.heybcat.tightlyweb.sql.parser.DefaultSqlParser;
-import com.heybcat.tightlyweb.sql.support.LiteMapping;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -18,12 +18,12 @@ import xyz.ldqc.tightcall.util.StringUtil;
 /**
  * @author Fetters
  */
-public class LiteMapperMethodInterceptor implements ProxyMethodInterceptor {
+public class MapperMethodInterceptor implements ProxyMethodInterceptor {
 
-    private final LiteMapping liteMapping;
+    private final DataMapping dataMapping;
 
-    public LiteMapperMethodInterceptor(LiteMapping liteMapping) {
-        this.liteMapping = liteMapping;
+    public MapperMethodInterceptor(DataMapping dataMapping) {
+        this.dataMapping = dataMapping;
     }
 
     @Override
@@ -63,11 +63,11 @@ public class LiteMapperMethodInterceptor implements ProxyMethodInterceptor {
 
         sql = DefaultSqlParser.parseSql(selectAnnotation.expressions(), method, sql, args);
 
-        PageInfo pageInfo = liteMapping.getPageInfo();
+        PageInfo pageInfo = dataMapping.getPageInfo();
         if (pageInfo != null) {
             String fromIndex = sql.substring(sql.toUpperCase().indexOf("FROM"));
             String countSql = "SELECT COUNT(*) " + fromIndex;
-            List<Long> count = liteMapping.select(Long.class, countSql, args);
+            List<Long> count = dataMapping.select(Long.class, countSql, args);
             if (count.isEmpty() || count.get(0) == 0 || count.get(0) < (long) pageInfo.getSize() * (
                 pageInfo.getCurrent() - 1)) {
                 return Collections.emptyList();
@@ -80,14 +80,14 @@ public class LiteMapperMethodInterceptor implements ProxyMethodInterceptor {
         }
 
         if (returnType.isArray()) {
-            return liteMapping.select(returnType.getComponentType(), sql, args);
+            return dataMapping.select(returnType.getComponentType(), sql, args);
         }
         if (List.class.isAssignableFrom(returnType)) {
             Type genericReturnType = method.getGenericReturnType();
             Type actualTypeArgument = ((ParameterizedType) genericReturnType).getActualTypeArguments()[0];
-            return liteMapping.select((Class<?>) actualTypeArgument, sql, args);
+            return dataMapping.select((Class<?>) actualTypeArgument, sql, args);
         }
-        return liteMapping.select(returnType, sql, args);
+        return dataMapping.select(returnType, sql, args);
     }
 
     private long insert(Object o, Method method, Object[] args, MethodProxy methodProxy) {
