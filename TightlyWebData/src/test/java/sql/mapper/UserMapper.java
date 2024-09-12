@@ -1,11 +1,11 @@
 package sql.mapper;
 
-import com.heybcat.tightlyweb.sql.annotation.LiteMapper;
+import com.heybcat.tightlyweb.sql.annotation.DataMapper;
 import com.heybcat.tightlyweb.sql.annotation.Select;
 import java.util.List;
 import sql.entity.User;
 
-@LiteMapper
+@DataMapper
 public interface UserMapper {
 
     @Select("SELECT * FROM user WHERE age >= 18")

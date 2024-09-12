@@ -5,7 +5,7 @@ import com.heybcat.tightlyweb.common.util.ReflectionUtil;
 import com.heybcat.tightlyweb.common.util.StrUtil;
 import com.heybcat.tightlyweb.sql.DataMapping;
 import com.heybcat.tightlyweb.sql.MapperMethodRef;
-import com.heybcat.tightlyweb.sql.annotation.LiteMapper;
+import com.heybcat.tightlyweb.sql.annotation.DataMapper;
 import com.heybcat.tightlyweb.sql.annotation.Table;
 import com.heybcat.tightlyweb.sql.annotation.TableId;
 import com.heybcat.tightlyweb.sql.entity.Page;
@@ -372,7 +372,7 @@ public abstract class BaseMapping implements DataMapping {
             List<Class<?>> packageClasses = PackageUtil.getPackageClasses(mapper, bootClass);
             final ProxyFactory proxyFactory = new ProxyFactory();
             packageClasses.forEach(clazz -> {
-                if (!clazz.isAnnotationPresent(LiteMapper.class)) {
+                if (!clazz.isAnnotationPresent(DataMapper.class)) {
                     return;
                 }
                 if (!clazz.isInterface()) {

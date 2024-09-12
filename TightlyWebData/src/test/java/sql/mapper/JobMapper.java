@@ -1,8 +1,8 @@
 package sql.mapper;
 
-import com.heybcat.tightlyweb.sql.annotation.LiteMapper;
+import com.heybcat.tightlyweb.sql.annotation.DataMapper;
 
-@LiteMapper
+@DataMapper
 public interface JobMapper {
 
 }
