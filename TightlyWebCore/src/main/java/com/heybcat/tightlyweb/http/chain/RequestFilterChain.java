@@ -1,6 +1,5 @@
 package com.heybcat.tightlyweb.http.chain;
 
-import com.heybcat.tightlyweb.annoation.ConfigValue;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.http.entity.WebContext;
 import com.heybcat.tightlyweb.http.filter.RequestFilter;

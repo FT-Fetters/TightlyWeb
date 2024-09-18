@@ -1,6 +1,5 @@
 package com.heybcat.tightlyweb.sql;
 
-import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.sql.entity.Page;
 import com.heybcat.tightlyweb.sql.entity.PageInfo;
 import java.util.List;

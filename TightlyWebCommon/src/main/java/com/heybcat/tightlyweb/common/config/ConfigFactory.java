@@ -1,6 +1,6 @@
-package com.heybcat.tightlyweb.config;
+package com.heybcat.tightlyweb.common.config;
 
-import com.heybcat.tightlyweb.annoation.ConfigValue;
+import com.heybcat.tightlyweb.common.annoation.ConfigValue;
 import com.heybcat.tightlyweb.common.resource.DefaultResourceLoader;
 import com.heybcat.tightlyweb.common.resource.Resource;
 import com.heybcat.tightlyweb.common.util.ReflectionUtil;

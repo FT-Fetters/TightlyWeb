@@ -1,6 +1,6 @@
 package com.heybcat.tightlyweb.http.chain;
 
-import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
+import com.heybcat.tightlyweb.common.config.TightlyWebConfigEntity;
 import java.nio.channels.Channel;
 import xyz.ldqc.tightcall.chain.Chain;
 import xyz.ldqc.tightcall.chain.OutboundChain;

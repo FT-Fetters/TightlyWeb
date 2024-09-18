@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.config;
+package com.heybcat.tightlyweb.common.config;
 
 import java.util.Map;
 

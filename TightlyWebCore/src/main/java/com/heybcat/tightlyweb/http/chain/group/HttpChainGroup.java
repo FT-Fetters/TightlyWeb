@@ -1,7 +1,7 @@
 package com.heybcat.tightlyweb.http.chain.group;
 
 import com.heybcat.tightlyweb.common.ioc.IocManager;
-import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
+import com.heybcat.tightlyweb.common.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.http.chain.CrossOriginChain;
 import com.heybcat.tightlyweb.http.chain.DispatcherRoutingChain;
 import com.heybcat.tightlyweb.http.chain.EncapsulateRoutingChain;

@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.annoation;
+package com.heybcat.tightlyweb.common.annoation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

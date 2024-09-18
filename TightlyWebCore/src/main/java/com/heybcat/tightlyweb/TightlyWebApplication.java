@@ -3,9 +3,9 @@ package com.heybcat.tightlyweb;
 
 import com.heybcat.tightlyweb.annoation.TightlyWeb;
 import com.heybcat.tightlyweb.common.cache.TightlyCache;
-import com.heybcat.tightlyweb.config.ConfigFactory;
-import com.heybcat.tightlyweb.config.ConfigManager;
-import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
+import com.heybcat.tightlyweb.common.config.ConfigFactory;
+import com.heybcat.tightlyweb.common.config.ConfigManager;
+import com.heybcat.tightlyweb.common.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.http.annotation.CrossOrigin;
 import com.heybcat.tightlyweb.server.WebServer;

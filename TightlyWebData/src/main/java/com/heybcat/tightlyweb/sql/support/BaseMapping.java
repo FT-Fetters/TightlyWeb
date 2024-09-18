@@ -1,5 +1,6 @@
 package com.heybcat.tightlyweb.sql.support;
 
+import com.heybcat.tightlyweb.common.config.ConfigManager;
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.common.util.ReflectionUtil;
 import com.heybcat.tightlyweb.common.util.StrUtil;
@@ -78,7 +79,7 @@ public abstract class BaseMapping implements DataMapping {
             basePackage = StringUtil.isBlank(basePackage) ? "" : basePackage;
             this.bootClass = iocManager.getBootClass();
             this.mapperManager = new MapperManager(basePackage, iocManager);
-            this.tableManager = new TableManager(this, basePackage);
+            this.tableManager = new TableManager(this, basePackage, iocManager);
             this.dbLog = Objects.requireNonNullElse(dbLog, false);
             this.database = getDataBaseByTarget(target);
         } catch (SQLException e) {
@@ -394,15 +395,23 @@ public abstract class BaseMapping implements DataMapping {
 
     private class TableManager {
 
+        private static final String CHECK_CONFIG = "server.db.check";
+
         private final DataMapping dataMapping;
 
         private final String basePackage;
 
-        public TableManager(DataMapping dataMapping, String basePackage) {
+        public TableManager(DataMapping dataMapping, String basePackage, IocManager iocManager) {
             this.dataMapping = dataMapping;
             this.basePackage = basePackage;
-            checkTableExistOrCreate();
-            checkTableChangeAndUpdate();
+            ConfigManager configManager = iocManager.getCat(ConfigManager.class);
+            if (configManager == null || configManager.get(CHECK_CONFIG) == null){
+                return;
+            }
+            if (configManager.get(CHECK_CONFIG).equals(Boolean.TRUE.toString())) {
+                checkTableExistOrCreate();
+                checkTableChangeAndUpdate();
+            }
         }
 
         private void checkTableExistOrCreate() {

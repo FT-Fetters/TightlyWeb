@@ -1,7 +1,7 @@
 package com.heybcat.tightlyweb.server;
 
 import com.heybcat.tightlyweb.common.GlobalEnum;
-import com.heybcat.tightlyweb.config.TightlyWebConfigEntity;
+import com.heybcat.tightlyweb.common.config.TightlyWebConfigEntity;
 import com.heybcat.tightlyweb.http.chain.group.HttpChainGroup;
 import com.heybcat.tightlyweb.http.core.WebDispatcher;
 import com.heybcat.tightlyweb.common.ioc.IocManager;

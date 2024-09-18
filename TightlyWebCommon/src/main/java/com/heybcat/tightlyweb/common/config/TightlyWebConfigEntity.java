@@ -1,4 +1,4 @@
-package com.heybcat.tightlyweb.config;
+package com.heybcat.tightlyweb.common.config;
 
 import com.heybcat.tightlyweb.annoation.ConfigValue;
 import lombok.Data;
@@ -38,6 +38,9 @@ public class TightlyWebConfigEntity {
 
     @ConfigValue(key = "server.db.password")
     private String dbPassword;
+
+    @ConfigValue(key = "server.db.check")
+    private Boolean dbCheck;
 
     @ConfigValue(key = "server.crossOrigin.enable")
     private Boolean crossOriginEnable;
