@@ -2,6 +2,7 @@ package com.heybcat.tightlyweb.sql.support;
 
 import com.heybcat.tightlyweb.common.ioc.IocManager;
 import com.heybcat.tightlyweb.sql.DataMapping;
+import com.heybcat.tightlyweb.sql.exception.DataMappingException;
 
 /**
  * @author Feters
@@ -19,7 +20,7 @@ public class MappingFactory {
             case MYSQL_8:
                 return MyMapping.getMapping(target, user, password, basePackage, dbLog, iocManager);
             default:
-                return null;
+                throw new DataMappingException("unknown data mapping type");
         }
     }
 
