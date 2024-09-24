@@ -33,7 +33,7 @@ public class YamlUtil {
         String resourceContent = getResourceContent(resource);
         Deque<String> propertyStack = new ArrayDeque<>();
         Map<String, String> configMap = new HashMap<>(8);
-        String[] lines = resourceContent.split("\r\n");
+        String[] lines = resourceContent.split(checkLineEnding(resourceContent));
         for (String line : lines) {
             // handle comment first
             line = handleComment(line);
@@ -54,6 +54,19 @@ public class YamlUtil {
             }
         }
         return configMap;
+    }
+
+    public static String checkLineEnding(String str){
+        int crlf = str.split("\r\n").length;
+        int lf = str.split("\n").length;
+        int cr = str.split("\r").length;
+        if (lf > crlf && lf > cr) {
+            return "\n";
+        } else if (crlf > lf && crlf > cr) {
+            return "\r\n";
+        } else {
+            return "\r";
+        }
     }
 
     private static String handleComment(String line) {
