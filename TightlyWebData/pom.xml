@@ -17,11 +17,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-    <dependency>
-      <groupId>com.heybcat</groupId>
-      <artifactId>tightly-call-common</artifactId>
-      <version>1.0.1</version>
-    </dependency>
     <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
     <dependency>
       <groupId>org.xerial</groupId>
