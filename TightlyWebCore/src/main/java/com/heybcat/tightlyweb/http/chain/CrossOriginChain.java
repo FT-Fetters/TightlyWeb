@@ -22,7 +22,9 @@ public class CrossOriginChain implements OutboundChain {
 
     @Override
     public void doChain(Channel channel, Object o) {
-        if (Boolean.TRUE.equals(!config.getCrossOriginEnable()) || !(o instanceof HttpNioResponse)) {
+        if (config.getCrossOriginEnable() == null ||
+            Boolean.TRUE.equals(!config.getCrossOriginEnable()) ||
+            !(o instanceof HttpNioResponse)) {
             nextChain.doChain(channel, o);
             return;
         }
