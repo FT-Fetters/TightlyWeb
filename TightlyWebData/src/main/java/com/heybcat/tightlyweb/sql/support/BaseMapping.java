@@ -14,6 +14,7 @@ import com.heybcat.tightlyweb.sql.entity.PageInfo;
 import com.heybcat.tightlyweb.sql.exception.ExecuteSqlException;
 import com.heybcat.tightlyweb.sql.exception.SqlConnectException;
 import com.heybcat.tightlyweb.sql.support.proxy.MapperMethodInterceptor;
+import com.heybcat.tightlyweb.sql.util.DBUtil;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -436,12 +435,12 @@ public abstract class BaseMapping implements DataMapping {
                 Map<String, Class<?>> addFieldMap = new HashMap<>(8);
                 Map<String, String> deleteFieldMap = new HashMap<>(8);
                 tableClassFiledMap.forEach((fieldName, fieldType) -> {
-                    if (!createSqlFieldMap.containsKey(fieldName)) {
+                    if (!createSqlFieldMap.containsKey(DBUtil.cleanField(fieldName))) {
                         addFieldMap.put(fieldName, fieldType);
                     }
                 });
                 createSqlFieldMap.forEach((fieldName, fieldType) -> {
-                    if (!tableClassFiledMap.containsKey(fieldName)) {
+                    if (!tableClassFiledMap.containsKey(DBUtil.cleanField(fieldName))) {
                         deleteFieldMap.put(fieldName, fieldType);
                     }
                 });
@@ -455,18 +454,45 @@ public abstract class BaseMapping implements DataMapping {
         }
 
         private Map<String, String> parseCreateSql2FieldMap(String createSql) {
+            String[] typeKeywords = {
+                // 数值类型
+                "TINYINT", "SMALLINT", "MEDIUMINT", "INT", "INTEGER", "BIGINT",
+                "FLOAT", "DOUBLE", "DECIMAL", "NUMERIC",
+
+                // 日期和时间类型
+                "DATE", "DATETIME", "TIMESTAMP", "TIME", "YEAR",
+
+                // 字符串类型
+                "CHAR", "VARCHAR", "BINARY", "VARBINARY", "TINYBLOB", "BLOB",
+                "MEDIUMBLOB", "LONGBLOB", "TINYTEXT", "TEXT", "MEDIUMTEXT",
+                "LONGTEXT", "ENUM", "SET",
+
+                // 空间数据类型
+                "GEOMETRY", "POINT", "LINESTRING", "POLYGON", "MULTIPOINT",
+                "MULTILINESTRING", "MULTIPOLYGON", "GEOMETRYCOLLECTION",
+
+                // JSON数据类型
+                "JSON",
+
+                // 位字段类型
+                "BIT"
+            };
             Map<String, String> fields = new HashMap<>(8);
 
-            // 正则表达式匹配字段定义
-            Pattern pattern = Pattern.compile("`(\\w+)`\\s+(\\w+)");
-            Matcher matcher = pattern.matcher(createSql);
+            createSql = createSql.substring(createSql.indexOf("(") + 1);
+            createSql = createSql.substring(0, createSql.lastIndexOf(")"));
 
-            while (matcher.find()) {
-                String fieldName = matcher.group(1);
-                String fieldType = matcher.group(2);
-                fields.put(fieldName, fieldType);
+            String splitPattern =",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+            String[] splitFields = createSql.split(splitPattern);
+            for (String splitField : splitFields) {
+                splitField = splitField.trim();
+                String[] word = splitField.split(" ");
+                Arrays.stream(typeKeywords).forEach(typeKeyword -> {
+                    if (word.length > 1 && word[1].toUpperCase().contains(typeKeyword)){
+                        fields.put(DBUtil.cleanField(word[0]), typeKeyword);
+                    }
+                });
             }
-
             return fields;
         }
 
