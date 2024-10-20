@@ -59,10 +59,10 @@ public class TightlyWebApplication {
         TightlyWeb tightlyWeb = bootClass.getAnnotation(TightlyWeb.class);
         String basePackage = tightlyWeb.basePackage();
         this.iocManager = new IocManager(basePackage, bootClass, ioc -> {
+            loadConfigManager(ioc);
+            loadCacheModule(ioc);
             registerSomething(ioc);
             loadDataMapping(ioc);
-            loadCacheModule(ioc);
-            loadConfigManager(ioc);
         });
     }
 
